@@ -22,6 +22,8 @@ import time
 import os
 import datetime as dt
 
+from plotly.subplots import make_subplots
+
 max_length = 86400 #seconds in a day
 
 
@@ -101,7 +103,8 @@ app.layout = html.Div([
            
             
         ]),
-        dcc.Tab(label='This year', children=[
+
+       dcc.Tab(label='This year', children=[
             html.H3('Yearly pressure log @ Baltazar lab with live updates'),
             dcc.Graph(
                 id='current year-live',
@@ -124,6 +127,32 @@ app.layout = html.Div([
           ),
 
         ]),
+        
+         dcc.Tab(label='Temperature and humidity', children=[
+            html.H3('Temperature and humidity log @ Baltazar lab with live updates'),
+            dcc.Graph(
+                id='Temp-live',
+                ),
+            dcc.Graph(
+                id='Humid-live',
+                ),                
+           dcc.Interval(
+                id='graph3-update',
+                interval=10000, #in milliseconds. Updates are every 1 minute, but 1 min refresh is too slow.
+                n_intervals=0
+                ),
+           html.Table([
+           html.Td([html.Tr(['Room temperature:']), html.Tr(id='Room_temp')]),
+           html.Td([html.Tr(['Room humidity:']), html.Tr(id='Room_humid')]),
+           html.Td([html.Tr(['Laser table temperature:']), html.Tr(id='Laser_temp')]),
+           html.Td([html.Tr(['Laser table humidity:']), html.Tr(id='Laser_humid')]),
+           html.Td([html.Tr(['THG module temperature:']), html.Tr(id='THG_temp')]),
+           html.Td([html.Tr(['THG module humidity:']), html.Tr(id='THG_humid')]),
+          ] ),
+           
+            
+        ]),
+        
                 dcc.Tab(label='Yearly logs', children=[
             html.H3('Pressure log @ Baltazar lab. Last 24h and current year'),
             html.Button('Refresh data',id='Refresh'),
@@ -203,6 +232,7 @@ def gen_today_update(interval):
                 }
     
  	return figure1, "{:.2E}".format(LL1[ind1])+' mbar',"{:.2E}".format(PC1[ind1])+' mbar' ,"{:.2E}".format(MC1[ind1])+' mbar' ,"{:.2E}".format(HHG1[ind1])+ ' mbar', "{:.2E}".format(FOC1[ind1])+' mbar', "{:.2E}".format(STR1[ind1])+' mbar', "{:.2E}".format(PRE1[ind1])+' mbar'
+ 	
 
 
 @app.callback(Output('current year-live', 'figure'),Output('LL_label2','children'),Output('PC_label2','children'), Output('MC_label2','children'), Output('HHG_label2','children'), 
@@ -212,8 +242,7 @@ Output('FOC_label2','children'), Output('STR_label2','children'), Output('PRE_la
 
 
 def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code with today file to test if bug still appears
-##	f2 = h5py.File('/media/data/Logs/Pressure/today.h5', 'r', libver='latest', swmr=True)   
-#	f2 = h5py.File('/media/data/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
+#	f2 = h5py.File('/media/data/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)   
 	f2 = h5py.File('/home/baltazar/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
 	f2['tstamp'].refresh()
 	f2['ind'].refresh()
@@ -242,7 +271,8 @@ def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code
 	ind2=f2['ind'][0]#-1 #added -1 to see if 1970 issue can be avoided
 	#ind2=ind2-1
 	#testing if the odd bug of 1.jan.1970 can be avoided if we plot from [1] istead of [0]
-	points2=ind2-3600#720#3600 #3600 = 60 h approx 2.5 days. Index out of range because we don't have2.5 days worth of data. test for 12 h (720 min)
+	points2=ind2-3600# 3600 = 60 h, approx 2.5 days. Index out of range because we don't have2.5 days worth of data. If data is lacking, an empty figure will appear. 
+	# If you want to see this plot, either diaply smaller time range, or you have to wait for the data to be collected - it appears once you reacg ind2
 
     
 	figure2={
@@ -266,6 +296,137 @@ def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code
                 }
     
 	return figure2, "{:.2E}".format(LL2[ind2])+' mbar', "{:.2E}".format(PC2[ind2])+' mbar',"{:.2E}".format(MC2[ind2])+' mbar' , "{:.2E}".format(HHG2[ind2])+ ' mbar', "{:.2E}".format(FOC2[ind2])+' mbar', "{:.2E}".format(STR2[ind2])+' mbar', "{:.2E}".format(PRE2[ind2])+' mbar'
+
+	
+	
+	
+	
+	
+@app.callback(Output('Temp-live', 'figure'), 
+              [Input('graph3-update','n_intervals')]
+              )
+
+
+def gen_Temp_update(interval):#testing for live temp and humidity updates
+
+	
+	f3 = pd.read_csv('/media/data/Logs/Temp_and_humidity/temperature_log.txt', sep =',' )
+	Date_Time_orig = f3['Date']
+	Date_Time=pd.to_datetime(Date_Time_orig)
+	T_laser = f3['temperature1']
+	Humid_laser = f3['humidity1']
+	T_room = f3['temperature2']
+	Humid_room = f3['humidity2']
+	T_THG = f3['temperatureTHG']
+	Humid_THG = f3['humidityTHG']
+
+	t3=Date_Time.tolist()
+	
+#	f3['Date'].refresh()
+#	f3['temperature1'].refresh()
+#	f3['humidity1'].refresh()
+#	f3['temperature2'].refresh()
+#	f3['humidity2'].refresh()
+#	f3['temperatureTHG'].refresh()
+#	f3['humidityTHG'].refresh()
+
+	LaserTemp=list(T_laser)
+	LaserHumid=list(Humid_laser)
+	RoomTemp=list(T_room)
+	RoomHumid=list(Humid_room)
+	THG_Temp=list(T_THG)
+	THG_Humid=list(Humid_THG)
+	
+	
+	ind1=f1['ind'][0]
+	start=ind1-86400
+	ind3=-1
+	
+
+	figure3={
+		'data': [
+	
+                    {'x': t3[-120:], 'y': LaserTemp[-120:], 'type': 'line', 'name': 'Laser table temperature'},
+                    {'x': t3[-120:], 'y': RoomTemp[-120:], 'type': 'line', 'name': 'Lab temperature'},
+                    {'x': t3[-120:], 'y': THG_Temp[-120:], 'type': 'line', 'name': 'THG module temperature'}               
+                ],
+
+                'layout':{
+                    "paper_bgcolor": "rgba(0,0,0,0)",
+                    "plot_bgcolor": "rgba(0,0,0,0)",
+                    'title':'Temperature log',
+                  #  'yaxis':{'type':'log'}
+                  'yaxis':{'type':'lin' },'showesponent':'all', 'exponentformat':'e', 'title': 'Temperature [C]'}
+                    }
+                
+    
+	return figure3
+	
+
+@app.callback(Output('Humid-live', 'figure'),Output('Room_temp','children'),Output('Room_humid','children'), Output('Laser_temp','children'), Output('Laser_humid','children'), Output('THG_temp','children'), Output('THG_humid','children'), 
+              [Input('graph3-update','n_intervals')]
+              )
+              
+
+def gen_Humid_update(interval):#testing for live temp and humidity updates
+
+
+	
+	f3 = pd.read_csv('/media/data/Logs/Temp_and_humidity/temperature_log.txt', sep =',' )
+	Date_Time_orig = f3['Date']
+	Date_Time=pd.to_datetime(Date_Time_orig)
+	T_laser = f3['temperature1']
+	Humid_laser = f3['humidity1']
+	T_room = f3['temperature2']
+	Humid_room = f3['humidity2']
+	T_THG = f3['temperatureTHG']
+	Humid_THG = f3['humidityTHG']
+
+	t3=Date_Time.tolist()
+	
+#	f3['Date'].refresh()
+#	f3['temperature1'].refresh()
+#	f3['humidity1'].refresh()
+#	f3['temperature2'].refresh()
+#	f3['humidity2'].refresh()
+#	f3['temperatureTHG'].refresh()
+#	f3['humidityTHG'].refresh()
+
+	LaserTemp=list(T_laser)
+	LaserHumid=list(Humid_laser)
+	RoomTemp=list(T_room)
+	RoomHumid=list(Humid_room)
+	THG_Temp=list(T_THG)
+	THG_Humid=list(Humid_THG)
+	
+	
+	ind1=f1['ind'][0]
+	start=ind1-86400
+	ind3=-1
+	
+
+	figure4={
+		'data': [
+	
+                  
+                    {'x': t3[-120:], 'y': LaserHumid[-120:], 'type': 'line', 'name': 'Laser table humidity'},
+                    {'x': t3[-120:], 'y': RoomHumid[-120:], 'type': 'line', 'name': 'Lab humidity'},
+                    {'x': t3[-120:], 'y': THG_Humid[-120:], 'type': 'line', 'name': 'THG module humidity'}
+
+                ],
+                'layout':{
+                    "paper_bgcolor": "rgba(0,0,0,0)",
+                    "plot_bgcolor": "rgba(0,0,0,0)",
+                    'title':'Humidity log',
+                  #  'yaxis':{'type':'log'}
+                  'yaxis':{'type':'lin'},'showesponent':'all', 'exponentformat':'e', 'title': 'Humidity [%]'}
+                    }
+                
+    
+#	return figure4
+
+    
+	return figure4, format(RoomTemp[ind3])+' C', format(RoomHumid[ind3])+' %', format(LaserTemp[ind3])+' C' , format(LaserHumid[ind3])+ ' %', format(THG_Temp[ind3])+' C', format(THG_Humid[ind3])+' %'
 
 
 @app.callback(Output('today-static', 'figure'),
@@ -298,13 +459,12 @@ def refresh_static1(n_clicks):
 	PC1=list(np.power(10,f1['PC']))
 	PRE1=list(np.power(10,f1['PRE']))
 	FOC1=list(np.power(10,f1['FOC']))
-	
 	ind1=f1['ind'][0]
 	start=ind1-86400
 
 
     
-	figure3={
+	figure5={
 		'data': [
 	
                     {'x': t1[:ind1], 'y': FOC1[:ind1], 'type': 'line', 'name': 'Focusing'},
@@ -323,8 +483,10 @@ def refresh_static1(n_clicks):
                   'yaxis':{'type':'log','showesponent':'all', 'exponentformat':'e', 'title': 'Pressure [mbar]'}
                     }
                 }
+	
+	ind1=f1['ind'][0]
     
-	return figure3
+	return figure5
 
 	
 @app.callback(Output('current year-static', 'figure'),
@@ -363,7 +525,7 @@ def refresh_static2(n_clicks):
 
 
     
-	figure4={
+	figure6={
 		'data': [
 	
                     {'x': t2[:ind2], 'y': FOC2[:ind2], 'type': 'line', 'name': 'Focusing'},
@@ -383,7 +545,7 @@ def refresh_static2(n_clicks):
                     }
                 }
     
-	return figure4
+	return figure6
 
 
 	
@@ -432,7 +594,7 @@ def refresh_static3(n_clicks):
 
 
     
-	figure5={
+	figure7={
 		'data': [
 	
                     {'x': t3[:], 'y': LaserTemp[:], 'type': 'line', 'name': 'Laser table temperature'},
@@ -449,14 +611,14 @@ def refresh_static3(n_clicks):
                     }
                 }
     
-	return figure5
+	return figure7
 
 	
 @app.callback(Output('humid-static', 'figure'),
               [Input('Refresh', 'n_clicks')]
               )
 	
-def refresh_static3(n_clicks):
+def refresh_static4(n_clicks):
     
 #	f1 = h5py.File('/media/data/Logs/Pressure/today.h5', 'r', libver='latest', swmr=True)
 #	f1 = h5py.File('/home/baltazar/Logs/Pressure/today.h5', 'r', libver='latest', swmr=True)
@@ -497,7 +659,7 @@ def refresh_static3(n_clicks):
 
 
     
-	figure6={
+	figure8={
 		'data': [
 	
                   
@@ -515,7 +677,7 @@ def refresh_static3(n_clicks):
                     }
                 }
     
-	return figure6
+	return figure8
 
 if __name__ == '__main__':
     app.run_server(debug=True)
