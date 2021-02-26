@@ -38,7 +38,7 @@ x-axis is showing time, y-axis is showing pressure (log scale) or temperature an
 
 
 
-server address: http://130.237.20.24/
+
 
 Testing is done on local server (demo/testinf server 127.0.0.2:8050). Do not test the app while making changes to the pressure logging code.
 
