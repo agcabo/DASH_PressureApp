@@ -1,5 +1,6 @@
-DASH web app for pressure tracking in Baltazar lab, version 1.3
-Antonija Grubisic-Cabo, 2020
+DASH web app for pressure tracking in Baltazar lab, version 1.5
+Working on 1.6 that includes temperature and humidity with live updates
+Antonija Grubisic-Cabo, 2021
 
 Web app for pressure logging.
 
@@ -11,7 +12,7 @@ App py is located in "pressure" folder, and can be activated by running "python 
 There are 3 tabs:
 One for today's pressure with 1s updates
 One for the current year with 1 min update 
-One for pressur logging for the last 24 h and full year
+One for Yearly logs of pressure, temperature and humidity. Includes also more detailed pressure logging for the last 24 h.
 
 Today's pressure is refreshed every 1 second, current year every 10 s.
 Todays shows last 10 minutes with continous update, and current year last 2.5 days. 
@@ -37,3 +38,5 @@ python environment specs:
 python 3.6, dash 1.14.0, 
 dash-core-components 1.10.2, dash-html-components 1.0.3, 
 h5py 2.10.0 (latest), numpy 1.16.4, pandas 0.24.2
+
+Hello Git!
