@@ -44,7 +44,7 @@ t1=a1.tolist()
 
 
 STR1=list(np.power(10,f1['STR']))
-HHG1=list(np.power(10,f1['HHG']))
+HHG_pre1=list(np.power(10,f1['HHG']))
 LL1=list(np.power(10,f1['LL']))
 MC1=list(np.power(10,f1['MC']))
 PC1=list(np.power(10,f1['PC']))
@@ -59,7 +59,7 @@ a2=np.array(f2['tstamp'][:f2['ind'][0]].astype('<M8[s]'),dtype='datetime64')
 #
 t2=a2.tolist()
 STR2=list(np.power(10,f2['STR']))
-HHG2=list(np.power(10,f2['HHG']))
+HHG_pre2=list(np.power(10,f2['HHG']))
 LL2=list(np.power(10,f2['LL']))
 MC2=list(np.power(10,f2['MC']))
 PC2=list(np.power(10,f2['PC']))
@@ -95,7 +95,7 @@ app.layout = html.Div([
            html.Td([html.Tr(['Load Lock:']), html.Tr(id='LL_label')]),
            html.Td([html.Tr(['Prep Chamber:']), html.Tr(id='PC_label')]),
            html.Td([html.Tr(['Main Chamber:']), html.Tr(id='MC_label')]),
-           html.Td([html.Tr(['HHG:']), html.Tr(id='HHG_label')]),
+           html.Td([html.Tr(['HHG Pre-vacuum:']), html.Tr(id='HHG_label')]),
            html.Td([html.Tr(['ReFOCusing:']), html.Tr(id='FOC_label')]),
            html.Td([html.Tr(['STeeRing:']), html.Tr(id='STR_label')]),
            html.Td([html.Tr(['PREvacuum:']), html.Tr(id='PRE_label')]),
@@ -118,7 +118,7 @@ app.layout = html.Div([
            html.Td([html.Tr(['Load Lock:']), html.Tr(id='LL_label2')]),
            html.Td([html.Tr(['Prep Chamber:']), html.Tr(id='PC_label2')]),
            html.Td([html.Tr(['Main Chamber:']), html.Tr(id='MC_label2')]),
-           html.Td([html.Tr(['HHG:']), html.Tr(id='HHG_label2')]),
+           html.Td([html.Tr(['HHG Pre-vacuum:']), html.Tr(id='HHG_label2')]),
            html.Td([html.Tr(['ReFOCusing:']), html.Tr(id='FOC_label2')]),
            html.Td([html.Tr(['STeeRing:']), html.Tr(id='STR_label2')]),
            html.Td([html.Tr(['PREvacuum:']), html.Tr(id='PRE_label2')]),
@@ -199,7 +199,7 @@ def gen_today_update(interval):
  	f1['PRE'].refresh()
  	f1['FOC'].refresh()
  	STR1=list(np.power(10,f1['STR']))
- 	HHG1=list(np.power(10,f1['HHG']))
+ 	HHG_pre1=list(np.power(10,f1['HHG']))
  	LL1=list(np.power(10,f1['LL']))
  	MC1=list(np.power(10,f1['MC']))
  	PC1=list(np.power(10,f1['PC']))
@@ -214,7 +214,7 @@ def gen_today_update(interval):
                 'data': [
  	
                     {'x': t1[points1:ind1], 'y': FOC1[points1:ind1], 'type': 'line', 'name': 'Focusing'},
-                    {'x': t1[points1:ind1], 'y': HHG1[points1:ind1], 'type': 'line', 'name': 'HHG'},
+                    {'x': t1[points1:ind1], 'y': HHG_pre1[points1:ind1], 'type': 'line', 'name': 'HHG Pre-vacuum'},
                     {'x': t1[points1:ind1], 'y': LL1[points1:ind1], 'type': 'line', 'name': 'Load Lock'},
                     {'x': t1[points1:ind1], 'y': MC1[points1:ind1], 'type': 'line', 'name': 'Main Chamber'},
                     {'x': t1[points1:ind1], 'y': PC1[points1:ind1], 'type': 'line', 'name': 'Preparation Chamber'},
@@ -231,7 +231,7 @@ def gen_today_update(interval):
                 }
                 }
     
- 	return figure1, "{:.2E}".format(LL1[ind1])+' mbar',"{:.2E}".format(PC1[ind1])+' mbar' ,"{:.2E}".format(MC1[ind1])+' mbar' ,"{:.2E}".format(HHG1[ind1])+ ' mbar', "{:.2E}".format(FOC1[ind1])+' mbar', "{:.2E}".format(STR1[ind1])+' mbar', "{:.2E}".format(PRE1[ind1])+' mbar'
+ 	return figure1, "{:.2E}".format(LL1[ind1])+' mbar',"{:.2E}".format(PC1[ind1])+' mbar' ,"{:.2E}".format(MC1[ind1])+' mbar' ,"{:.2E}".format(HHG_pre1[ind1])+ ' mbar', "{:.2E}".format(FOC1[ind1])+' mbar', "{:.2E}".format(STR1[ind1])+' mbar', "{:.2E}".format(PRE1[ind1])+' mbar'
  	
 
 
@@ -261,7 +261,7 @@ def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code
 	f2['FOC'].refresh()
 
 	STR2=list(np.power(10,f2['STR']))
-	HHG2=list(np.power(10,f2['HHG']))
+	HHG_pre2=list(np.power(10,f2['HHG']))
 	LL2=list(np.power(10,f2['LL']))
 	MC2=list(np.power(10,f2['MC']))
 	PC2=list(np.power(10,f2['PC']))
@@ -279,7 +279,7 @@ def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code
                 'data': [
 	
                     {'x': t2[points2:ind2], 'y': FOC2[points2:ind2], 'type': 'line', 'name': 'Focusing'},
-                    {'x': t2[points2:ind2], 'y': HHG2[points2:ind2], 'type': 'line', 'name': 'HHG'},
+                    {'x': t2[points2:ind2], 'y': HHG_pre2[points2:ind2], 'type': 'line', 'name': 'HHG Pre-vacuum'},
                     {'x': t2[points2:ind2], 'y': LL2[points2:ind2], 'type': 'line','name': 'Load Lock'},
                     {'x': t2[points2:ind2], 'y': MC2[points2:ind2], 'type': 'line', 'name': 'Main Chamber'},
                     {'x': t2[points2:ind2], 'y': PC2[points2:ind2], 'type': 'line', 'name': 'Preparation Chamber'},
@@ -295,7 +295,7 @@ def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code
                     }
                 }
     
-	return figure2, "{:.2E}".format(LL2[ind2])+' mbar', "{:.2E}".format(PC2[ind2])+' mbar',"{:.2E}".format(MC2[ind2])+' mbar' , "{:.2E}".format(HHG2[ind2])+ ' mbar', "{:.2E}".format(FOC2[ind2])+' mbar', "{:.2E}".format(STR2[ind2])+' mbar', "{:.2E}".format(PRE2[ind2])+' mbar'
+	return figure2, "{:.2E}".format(LL2[ind2])+' mbar', "{:.2E}".format(PC2[ind2])+' mbar',"{:.2E}".format(MC2[ind2])+' mbar' , "{:.2E}".format(HHG_pre2[ind2])+ ' mbar', "{:.2E}".format(FOC2[ind2])+' mbar', "{:.2E}".format(STR2[ind2])+' mbar', "{:.2E}".format(PRE2[ind2])+' mbar'
 
 	
 	
@@ -453,7 +453,7 @@ def refresh_static1(n_clicks):
 	f1['FOC'].refresh()
 
 	STR1=list(np.power(10,f1['STR']))
-	HHG1=list(np.power(10,f1['HHG']))
+	HHG_pre1=list(np.power(10,f1['HHG']))
 	LL1=list(np.power(10,f1['LL']))
 	MC1=list(np.power(10,f1['MC']))
 	PC1=list(np.power(10,f1['PC']))
@@ -468,7 +468,7 @@ def refresh_static1(n_clicks):
 		'data': [
 	
                     {'x': t1[:ind1], 'y': FOC1[:ind1], 'type': 'line', 'name': 'Focusing'},
-                    {'x': t1[:ind1], 'y': HHG1[:ind1], 'type': 'line', 'name': 'HHG'},
+                    {'x': t1[:ind1], 'y': HHG_pre1[:ind1], 'type': 'line', 'name': 'HHG Pre-vacuum'},
                     {'x': t1[:ind1], 'y': LL1[:ind1], 'type': 'line', 'name': 'Load Lock'},
                     {'x': t1[:ind1], 'y': MC1[:ind1], 'type': 'line', 'name': 'Main Chamber'},
                     {'x': t1[:ind1], 'y': PC1[:ind1], 'type': 'line', 'name': 'Preparation Chamber'},
@@ -513,7 +513,7 @@ def refresh_static2(n_clicks):
 	f2['FOC'].refresh()
 
 	STR2=list(np.power(10,f2['STR']))
-	HHG2=list(np.power(10,f2['HHG']))
+	HHG_pre2=list(np.power(10,f2['HHG']))
 	LL2=list(np.power(10,f2['LL']))
 	MC2=list(np.power(10,f2['MC']))
 	PC2=list(np.power(10,f2['PC']))
@@ -529,7 +529,7 @@ def refresh_static2(n_clicks):
 		'data': [
 	
                     {'x': t2[:ind2], 'y': FOC2[:ind2], 'type': 'line', 'name': 'Focusing'},
-                    {'x': t2[:ind2], 'y': HHG2[:ind2], 'type': 'line', 'name': 'HHG'},
+                    {'x': t2[:ind2], 'y': HHG_pre2[:ind2], 'type': 'line', 'name': 'HHG Pre-vacuum'},
                     {'x': t2[:ind2], 'y': LL2[:ind2], 'type': 'line', 'name': 'Load Lock'},
                     {'x': t2[:ind2], 'y': MC2[:ind2], 'type': 'line', 'name': 'Main Chamber'},
                     {'x': t2[:ind2], 'y': PC2[:ind2], 'type': 'line', 'name': 'Preparation Chamber'},
