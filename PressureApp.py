@@ -81,7 +81,7 @@ Humid_THG = f3['humidityTHG']
 
 app.layout = html.Div([
     dcc.Tabs([
-        dcc.Tab(label='Today', children=[
+        dcc.Tab(label='Current pressure', children=[
             html.H3('Pressure log @ Baltazar lab with live updates'),
             dcc.Graph(
                 id='today-live',
@@ -104,7 +104,7 @@ app.layout = html.Div([
             
         ]),
 
-       dcc.Tab(label='This year', children=[
+       dcc.Tab(label='Daily pressure', children=[
             html.H3('Yearly pressure log @ Baltazar lab with live updates'),
             dcc.Graph(
                 id='current year-live',
