@@ -54,7 +54,7 @@ FOC1=list(np.power(10,f1['FOC']))
 ind1=f1['ind'][0]
 
 #f2 = h5py.File('/media/data/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
-f2 = h5py.File('/home/baltazar/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
+f2 = h5py.File('/home/baltazar/Logs/Pressure/2022.h5', 'r', libver='latest', swmr=True)
 a2=np.array(f2['tstamp'][:f2['ind'][0]].astype('<M8[s]'),dtype='datetime64')
 #
 t2=a2.tolist()
@@ -497,7 +497,7 @@ def refresh_static1(n_clicks):
 def refresh_static2(n_clicks):
 
 #	f2 = h5py.File('/media/data/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
-	f2 = h5py.File('/home/baltazar/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
+	f2 = h5py.File('/home/baltazar/Logs/Pressure/2022.h5', 'r', libver='latest', swmr=True)
 	f2['tstamp'].refresh()
 	f2['ind'].refresh()
 	a2=np.array(f2['tstamp'][:f2['ind'][0]].astype('<M8[s]'),dtype='datetime64')
