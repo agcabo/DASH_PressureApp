@@ -243,7 +243,7 @@ Output('FOC_label2','children'), Output('STR_label2','children'), Output('PRE_la
 
 def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code with today file to test if bug still appears
 #	f2 = h5py.File('/media/data/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)   
-	f2 = h5py.File('/home/baltazar/Logs/Pressure/2021.h5', 'r', libver='latest', swmr=True)
+	f2 = h5py.File('/home/baltazar/Logs/Pressure/2022.h5', 'r', libver='latest', swmr=True)
 	f2['tstamp'].refresh()
 	f2['ind'].refresh()
 	a2=np.array(f2['tstamp'][:f2['ind'][0]].astype('<M8[s]'),dtype='datetime64')
