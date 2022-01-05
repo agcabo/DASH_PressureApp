@@ -272,7 +272,7 @@ def gen_year_update(interval):#testing for a bug in 2020/h5 file!!! running code
 	#ind2=ind2-1
 	#testing if the odd bug of 1.jan.1970 can be avoided if we plot from [1] istead of [0]
 	points2=ind2-3600# 3600 = 60 h, approx 2.5 days. Index out of range because we don't have2.5 days worth of data. If data is lacking, an empty figure will appear. 
-	# If you want to see this plot, either diaply smaller time range, or you have to wait for the data to be collected - it appears once you reacg ind2
+	# If you want to see this plot, either display smaller time range, or you have to wait for the data to be collected - it appears once you reach ind2
 
     
 	figure2={
@@ -521,20 +521,20 @@ def refresh_static2(n_clicks):
 	FOC2=list(np.power(10,f2['FOC']))
 	
 	ind2=f2['ind'][0]#-1 #added -1 to see if 1970 issue can be avoided
-	end=ind2-1
+	end=ind2-1 #1970 bug appeared again, replace all :ind2 in figure6 with end and see if bug fixed
 
 
     
 	figure6={
 		'data': [
 	
-                    {'x': t2[:ind2], 'y': FOC2[:ind2], 'type': 'line', 'name': 'Focusing'},
-                    {'x': t2[:ind2], 'y': HHG_pre2[:ind2], 'type': 'line', 'name': 'HHG Pre-vacuum'},
-                    {'x': t2[:ind2], 'y': LL2[:ind2], 'type': 'line', 'name': 'Load Lock'},
-                    {'x': t2[:ind2], 'y': MC2[:ind2], 'type': 'line', 'name': 'Main Chamber'},
-                    {'x': t2[:ind2], 'y': PC2[:ind2], 'type': 'line', 'name': 'Preparation Chamber'},
-                    {'x': t2[:ind2], 'y': PRE2[:ind2], 'type': 'line', 'name': 'Pre-vacuum'},
-                    {'x': t2[:ind2], 'y': STR2[:ind2], 'type': 'line', 'name': 'Steering Chamber'}
+                    {'x': t2[:end], 'y': FOC2[:end], 'type': 'line', 'name': 'Focusing'},
+                    {'x': t2[:end], 'y': HHG_pre2[:end], 'type': 'line', 'name': 'HHG Pre-vacuum'},
+                    {'x': t2[:end], 'y': LL2[:end], 'type': 'line', 'name': 'Load Lock'},
+                    {'x': t2[:end], 'y': MC2[:end], 'type': 'line', 'name': 'Main Chamber'},
+                    {'x': t2[:end], 'y': PC2[:end], 'type': 'line', 'name': 'Preparation Chamber'},
+                    {'x': t2[:end], 'y': PRE2[:end], 'type': 'line', 'name': 'Pre-vacuum'},
+                    {'x': t2[:end], 'y': STR2[:end], 'type': 'line', 'name': 'Steering Chamber'}
                 ],
                 'layout':{
                     "paper_bgcolor": "rgba(0,0,0,0)",
